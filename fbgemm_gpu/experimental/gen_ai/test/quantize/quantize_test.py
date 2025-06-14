@@ -41,7 +41,9 @@ except ImportError:
 
 running_on_github: bool = os.getenv("GITHUB_ENV") is not None
 
-if torch.cuda.is_available() and supports_float8_fnuz():
+if torch.cuda.is_available() and supports_float8_fnuz(
+    throw_on_hip_incompatibility=(not running_on_github)
+):
     # Supported FP8 format is different on NV and AMD.
     fp8_e4m3: torch.dtype = torch.float8_e4m3fnuz
     fp8_e5m2: torch.dtype = torch.float8_e5m2fnuz
